@@ -19,10 +19,11 @@ $config = [
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user' => [
+        'user' => array(
             'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
-        ],
+            //'enableSession' =>true,
+        ),
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],

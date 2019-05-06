@@ -28,16 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $form->field($model, 'password')->passwordInput() ?>
 
-    <?= $form->field($model, 'check_user')->checkbox([
-        'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
-    ]) ?>
+ ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">
-            <?= Html::submitButton('Login', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('login', ['class' => 'btn btn-primary']) ?>
         </div>
     </div>
 
     <?php ActiveForm::end(); ?>
-
+    <a href="reg"><?=$err;?></a>
 </div>

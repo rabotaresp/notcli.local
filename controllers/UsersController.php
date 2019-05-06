@@ -13,61 +13,68 @@ use app\models\ContactForm;
 
 class UsersController extends Controller
 {
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
+//    public function actionIndex()
+//    {
+//        $model = new Users();
+//        if(Yii::$app->user->isGuest) {
+//            return $this->redirect('/users/login');
+//        }
+//        return $this->render('index',['model'=>$model,]);
+//    }
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-        $req = Yii::$app->request->post();
-        $login = $req['login'];
-        $pass = $req['password'];
-        $user = Users::find()->andWhere(['login'=>$login])->one();
-        if ($user){
-            if(\Yii::$app->security->validatePassword($pass, $user->password)){
-                $log = \Yii::$app->user->login($user);
-                return $this->render('/site/index', ['log'=>$log,]);
+        $model = new Users();
+        if(Yii::$app->request->post('Users')){
+            $req = Yii::$app->request->post('Users');
+            $login = $req['login'];
+            $pass = $req['password'];
+            $user = Users::find()->andWhere(['login'=>$login])->one();
+            if ($user){
+                if(\Yii::$app->security->validatePassword($pass, $user->password)){
+                    \Yii::$app->user->login($user);
+                    return $this->redirect('/site/index');
+                }
+            }
+            else{
+                $err = "Логин не зарегистрирован, пройдите регистрацию";
             }
         }
-        else{
-            header('location: /users/reg');
-            exit();
-        }
-
-//        if ($model->load($req) && $model->login()) {
-//            return $this->goBack();
-//        }
-
-//        $model->password = '';
-        return $this->render('login');
+        return $this->render('login',['model'=>$model,'err' => $err]);
     }
     public function actionReg()
     {
-        //$err = 'this login is busy, choose another';
         $newUser = new Users();
-//        $newUser->load(Yii::$app->request->post());
-        $req = Yii::$app->request->post();
+        $req = Yii::$app->request->post('Users');
         $name = $req['name'];
         $login = $req['login'];
-        $pass = $req['password'];
-        $check = $req['check_user'];
-        $newUser->name = $name;
-        $newUser->login = $login;
-        $newUser->password = $pass;
-        $newUser->check_user = $check;
-        $newUser->save();
-        if($newUser->save())
-        {
-            header('location: /site/index');
-
+        $user = Users::find()->andWhere(['login'=>$login])->one();
+        if(!$user){
+            $pass = $req['password'];
+            $check = $req['check_user'];
+            $newUser->name = $name;
+            $newUser->login = $login;
+            $newUser->password = Yii::$app->security->generatePasswordHash($pass);
+            $newUser->check_user = $check;
+            $newUser->save();
+            if($newUser->save())
+            {
+                    \Yii::$app->user->login($newUser);
+                    return $this->redirect('/site/index');
+            }
+            else{
+                $newUser->errors;
+            }
         }
         else{
-            $newUser->error;
+            $err = "Логин занят, выберите другой";
         }
-        return $this->render('reg', ['model' => $newUser, ]);
+        $newUser->name = '';
+        $newUser->login = '';
+        $newUser->password = '';
+        return $this->render('reg', ['model' => $newUser, 'err' => $err]);
 
     }
 }
