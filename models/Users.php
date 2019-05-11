@@ -50,7 +50,7 @@ class Users extends ActiveRecord implements IdentityInterface
             'name' => 'Name',
             'login' => 'Login',
             'password' => 'Password',
-            'check_user' => 'If you are not client, checked',
+            'check_user' => 'Are you notarius? Checked',
         ];
     }
 

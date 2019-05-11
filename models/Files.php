@@ -3,6 +3,8 @@
 namespace app\models;
 
 use Yii;
+use \yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "files".
@@ -12,8 +14,9 @@ use Yii;
  * @property int $user_id
  * @property string $fileway
  */
-class Files extends \yii\db\ActiveRecord
+class Files extends ActiveRecord
 {
+    public $docFile;
     /**
      * {@inheritdoc}
      */
@@ -30,7 +33,8 @@ class Files extends \yii\db\ActiveRecord
         return [
             [['filename', 'user_id', 'fileway'], 'required'],
             [['user_id'], 'integer'],
-            [['filename', 'fileway'], 'string', 'max' => 250],
+            [['fileway','filename'], 'string', 'max' => 250],
+            [['docFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf, x-pdf'],
         ];
     }
 
@@ -43,7 +47,37 @@ class Files extends \yii\db\ActiveRecord
             'id' => 'ID',
             'filename' => 'Filename',
             'user_id' => 'User ID',
-            'fileway' => 'Fileway',
+            'fileway' => 'Path on file in script',
+            'docFile' => 'Name File',
         ];
     }
+
+    /**
+     * @return bool
+     */
+    public function upload($path, $name)
+    {
+        if ($this->validate()) {
+            if(!file_exists($path)){
+                mkdir($path, 0777,true);
+            }
+            $this->docFile->saveAs($path.'/'. $name. '.' . $this->docFile->extension);
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function download()
+    {
+
+    }
+
+    /**
+     * Finds an identity by the given ID.
+     * @param string|int $id the ID to be looked for
+     * @return IdentityInterface the identity object that matches the given ID.
+     * Null should be returned if such an identity cannot be found
+     * or the identity is not in an active state (disabled, deleted, etc.)
+     */
+
 }

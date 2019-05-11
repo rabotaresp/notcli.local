@@ -35,7 +35,11 @@ class UsersController extends Controller
             if ($user){
                 if(\Yii::$app->security->validatePassword($pass, $user->password)){
                     \Yii::$app->user->login($user);
-                    return $this->redirect('/site/index');
+                    if(Yii::$app->user->identity->check_user){
+                        return $this->redirect('/files/notarius');
+                    }
+//                    return $this->redirect('/site/index');
+                    return $this->redirect('/files/client');
                 }
             }
             else{
@@ -47,29 +51,35 @@ class UsersController extends Controller
     public function actionReg()
     {
         $newUser = new Users();
-        $req = Yii::$app->request->post('Users');
-        $name = $req['name'];
-        $login = $req['login'];
-        $user = Users::find()->andWhere(['login'=>$login])->one();
-        if(!$user){
+        if(Yii::$app->request->post('Users')) {
+            $req = Yii::$app->request->post('Users');
+            $name = $req['name'];
+            $login = $req['login'];
             $pass = $req['password'];
             $check = $req['check_user'];
-            $newUser->name = $name;
-            $newUser->login = $login;
-            $newUser->password = Yii::$app->security->generatePasswordHash($pass);
-            $newUser->check_user = $check;
-            $newUser->save();
-            if($newUser->save())
-            {
+            $user = Users::find()->andWhere(['login' => $login])->one();
+            if (!$user) {
+                $newUser->name = $name;
+                $newUser->login = $login;
+                $newUser->password = Yii::$app->security->generatePasswordHash($pass);
+                $newUser->check_user = $check;
+                $newUser->save();
+                if (!$newUser->save()) {
+                    echo'<pre>';
+                    print_r($newUser->errors);
+                    exit();
+                }
+                if($check)
+                {
                     \Yii::$app->user->login($newUser);
-                    return $this->redirect('/site/index');
+                    return $this->redirect('/files/notarius');
+                }
+                \Yii::$app->user->login($newUser);
+                return $this->redirect('/files/client');
+//            return $this->redirect('/site/index');
+            } else {
+                $err = "Логин занят, выберите другой";
             }
-            else{
-                $newUser->errors;
-            }
-        }
-        else{
-            $err = "Логин занят, выберите другой";
         }
         $newUser->name = '';
         $newUser->login = '';
