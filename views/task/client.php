@@ -44,22 +44,24 @@ $this->params['breadcrumbs'][] = $this->title;
         <thead>
         <tr>
             <th scope="col">Task</th>
-            <th scope="col">Deadline</th>
-            <th scope="col">Button Done</th>
-            <th scope="col">Button Modify</th>
+            <th scope="col">Name Notariuses</th>
+            <th scope="col">Status tasks</th>
+            <th scope="col">Download file</th>
         </tr>
         </thead>
         <tbody>
         <?
-        //            while($row = mysqli_fetch_assoc($res)){
+            foreach ($task_table as $item) {
         ?>
         <tr>
-            <!--                    <td>--><?//= $row['task'] ?><!--</td>-->
-            <!--                    <td>--><?//= $row['deadline'] ?><!--</td>-->
-            <!--                    <td><a href="delete?ind=--><?//= $row['task'].'|'.$row['deadline']?><!--"> Done</a></td>-->
-            <!--                    <td><a href="modify?inm=--><?//= $row['task'].'|'.$row['deadline']?><!--"> Modify</a></td>-->
+            <td><?= $item['tasks'] ?></td>
+<!--            <td>--><?//= $item['user_check'] ?><!--</td>-->
+            <td><?= $req_names; ?></td>
+            <td><?= $item['task_check'] ?></td>
+            <td><?= Html::submitButton('Download file', ['class' => 'btn btn-primary']) ?> </td>
+
         </tr>
-        <!--            --><?// }mysqli_close($db); ?>
+        <? }; ?>
 
         </tbody>
     </table>

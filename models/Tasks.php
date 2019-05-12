@@ -19,6 +19,7 @@ use Yii;
  */
 class Tasks extends \yii\db\ActiveRecord
 {
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +34,7 @@ class Tasks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'user_check', 'tasks', 'file_key', 'task_check'], 'required'],
+            [['user_id', 'user_check', 'tasks', 'file_key'], 'required'],
             [['user_id', 'user_check', 'file_key', 'task_check'], 'integer'],
             [['tasks'], 'string', 'max' => 100],
             [['file_key'], 'exist', 'skipOnError' => true, 'targetClass' => Files::className(), 'targetAttribute' => ['file_key' => 'id']],
@@ -70,5 +71,20 @@ class Tasks extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
+    }
+    public function findTaskNot()
+    {
+        $task_table = self::find()->andWhere(['user_check'=> 0])->all();
+        return $task_table;
+    }
+    public function findTaskCli()
+    {
+        $task_table = self::find()->andWhere(['user_id'=> Yii::$app->user->identity->id])->all();
+        return $task_table;
+    }
+    public function findName($id)
+    {
+        $req_name = Users::findOne(['id'=>$id]);
+        return $req_name['name'];
     }
 }

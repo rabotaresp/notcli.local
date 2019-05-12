@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
 
-$this->title = 'Task client';
+$this->title = 'Table tasks clients for';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>Please eding file to upload:</p>
 
     <?php $form = ActiveForm::begin([
-        'id' => 'task-form',
+        'id' => 'upload-form-notarius',
         'layout' => 'horizontal',
         'options' => ['enctype' => 'multipart/form-data'],
         'fieldConfig' => [
@@ -48,18 +48,39 @@ $this->params['breadcrumbs'][] = $this->title;
         </thead>
         <tbody>
         <?
-        //            while($row = mysqli_fetch_assoc($res)){
+            $count = 0;
+            foreach ($task_table as $item) {
+                $name = $req_names[$count];
         ?>
         <tr>
-            <!--                    <td>--><?//= $row['task'] ?><!--</td>-->
-            <!--                    <td>--><?//= $row['deadline'] ?><!--</td>-->
-            <!--                    <td><a href="delete?ind=--><?//= $row['task'].'|'.$row['deadline']?><!--"> Done</a></td>-->
-                                <td><?= Html::submitButton('Task', ['class' => 'btn btn-primary']) ?> </td>
-            <td><?= Html::submitButton('Cient name', ['class' => 'btn btn-primary']) ?> </td>
-            <td><?= Html::submitButton('Status', ['class' => 'btn btn-primary']) ?> </td>
+            <td><?= $item['tasks'] ?></td>
+            <td><?= $name;?> </td>
+            <td>
+                <?= Html::submitButton('status', ['class' => 'btn btn-primary']) ?>
+
+                <?$js = <<<JS
+                        $('form').on('beforeSubmit', function(){
+                        var data = $(this).serialize();
+                        $.ajax({
+                        url: '/files/notarius',
+                        type: 'POST',
+                        data: data,
+                        success: function(st1){
+                        console.log(st1);
+                        },
+                        error: function(){
+                        alert('Error!');
+                        }
+                        });
+                        return false;
+                        });
+                    JS;
+                    $this->registerJs($js);
+                ?>
+            </td>
             <td><?= Html::submitButton('Download file', ['class' => 'btn btn-primary']) ?> </td>
         </tr>
-        <!--            --><?// }mysqli_close($db); ?>
+        <? $count++;}; ?>
 
         </tbody>
     </table>
