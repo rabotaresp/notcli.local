@@ -4,14 +4,8 @@ namespace app\controllers;
 
 use app\models\Files;
 use app\models\Tasks;
-use app\models\Users;
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
-use yii\web\Response;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
 use yii\web\UploadedFile;
 
 class FilesController extends Controller
@@ -78,23 +72,25 @@ class FilesController extends Controller
                 exit();
             }
             $req_t = Yii::$app->request->Post('Tasks');
-            $task->user_id = Yii::$app->user->identity->id;
+            if($req_t){
+                $task->user_id = Yii::$app->user->identity->id;
 
-            if(Yii::$app->user->identity->check_user ==0) {
-                $task->user_check = Yii::$app->user->identity->id;
-            }
-            $task->tasks = $req_t['tasks'];
-            $task->file_key = $model->id;
-            $task->task_check = 0;
-            $task->save();
-            if(!$task->save()){
-                echo'<pre>';
-                print_r($task->errors);
-                exit();
-            }
-            if ($model->upload($path, $name)) {
-                // file is uploaded successfully
-                return $this->redirect('/files/notarius');
+                if(Yii::$app->user->identity->check_user ==0) {
+                    $task->user_check = Yii::$app->user->identity->id;
+                }
+                $task->tasks = $req_t['tasks'];
+                $task->file_key = $model->id;
+                $task->task_check = 0;
+                $task->save();
+                if(!$task->save()){
+                    echo'<pre>';
+                    print_r($task->errors);
+                    exit();
+                }
+                if ($model->upload($path, $name)) {
+                    // file is uploaded successfully
+                    return $this->redirect('/files/notarius');
+                }
             }
         }
         $task->tasks = null;
@@ -105,14 +101,16 @@ class FilesController extends Controller
         }
         return $this->render('/task/notar', ['model' => $model, 'task' => $task, 'task_table'=>$task_table, 'req_names'=> $req_names,]);
     }
-//    public function actionDowload()
-//    {
-//        $path = Yii::getAlias('@webroot') . '/uploads';
-//
+    public function actionDowload($id)
+    {
+        $user = Yii::$app->user->identity->id;
+        $file_path = Files::find()->andWhere(['filename' => $id])->andWhere(['user-id'=>$user])->one();
+        $file = Yii::getAlias('@webroot') . $file_path;
+
 //        $file = $path . '/sample.pdf';
-//
-//        if (file_exists($file)) {
-//            Yii::$app->response->sendFile($file);
-//        }
-//    }
+
+        if (file_exists($file)) {
+            Yii::$app->response->sendFile($file);
+        }
+    }
 }

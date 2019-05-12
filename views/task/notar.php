@@ -58,25 +58,25 @@ $this->params['breadcrumbs'][] = $this->title;
             <td>
                 <?= Html::submitButton('status', ['class' => 'btn btn-primary']) ?>
 
-                <?$js = <<<JS
-                        $('form').on('beforeSubmit', function(){
-                        var data = $(this).serialize();
-                        $.ajax({
-                        url: '/files/notarius',
-                        type: 'POST',
-                        data: data,
-                        success: function(st1){
-                        console.log(st1);
-                        },
-                        error: function(){
-                        alert('Error!');
-                        }
-                        });
-                        return false;
-                        });
-                    JS;
-                    $this->registerJs($js);
-                ?>
+<!--                --><?//$js = <<<JS
+//                        $('form').on('beforeSubmit', function(){
+//                        var data = $(this).serialize();
+//                        $.ajax({
+//                        url: '/files/notarius',
+//                        type: 'POST',
+//                        data: data,
+//                        success: function(st1){
+//                        console.log(st1);
+//                        },
+//                        error: function(){
+//                        alert('Error!');
+//                        }
+//                        });
+//                        return false;
+//                        });
+//                    JS;
+//                    $this->registerJs($js);
+//                ?>
             </td>
             <td><?= Html::submitButton('Download file', ['class' => 'btn btn-primary']) ?> </td>
         </tr>

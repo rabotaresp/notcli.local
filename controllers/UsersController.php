@@ -13,14 +13,6 @@ use app\models\ContactForm;
 
 class UsersController extends Controller
 {
-//    public function actionIndex()
-//    {
-//        $model = new Users();
-//        if(Yii::$app->user->isGuest) {
-//            return $this->redirect('/users/login');
-//        }
-//        return $this->render('index',['model'=>$model,]);
-//    }
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
@@ -36,10 +28,9 @@ class UsersController extends Controller
                 if(\Yii::$app->security->validatePassword($pass, $user->password)){
                     \Yii::$app->user->login($user);
                     if(Yii::$app->user->identity->check_user){
-                        return $this->redirect('/files/notarius');
+                        return $this->redirect('/notarius/notarius');
                     }
-//                    return $this->redirect('/site/index');
-                    return $this->redirect('/files/client');
+                    return $this->redirect('/client/client');
                 }
             }
             else{
@@ -72,11 +63,10 @@ class UsersController extends Controller
                 if($check)
                 {
                     \Yii::$app->user->login($newUser);
-                    return $this->redirect('/files/notarius');
+                    return $this->redirect('/notarius/notarius');
                 }
                 \Yii::$app->user->login($newUser);
-                return $this->redirect('/files/client');
-//            return $this->redirect('/site/index');
+                return $this->redirect('/client/client');
             } else {
                 $err = "Логин занят, выберите другой";
             }
@@ -85,6 +75,5 @@ class UsersController extends Controller
         $newUser->login = '';
         $newUser->password = '';
         return $this->render('reg', ['model' => $newUser, 'err' => $err]);
-
     }
 }

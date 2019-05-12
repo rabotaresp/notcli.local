@@ -67,9 +67,17 @@ class Files extends ActiveRecord
             return false;
         }
     }
-    public function download()
+    public function actionDowload($key)
     {
+        $user = Yii::$app->user->identity->id;
+        $file_path = Files::find()->andWhere(['filename' => $key])->andWhere(['user-id'=>$user])->one();
+        $file = Yii::getAlias('@webroot') . $file_path;
 
+//        $file = $path . '/sample.pdf';
+
+        if (file_exists($file)) {
+            Yii::$app->response->sendFile($file);
+        }
     }
 
     /**
