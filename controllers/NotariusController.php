@@ -58,7 +58,24 @@ class NotariusController extends Controller
         $task_table = $task->findTaskNot();
         foreach ($task_table as $item) {
             $req_names[] = $task->findName($item['user_id']);
+
         }
         return $this->render('/task/notar', ['model' => $model, 'task' => $task, 'task_table'=>$task_table, 'req_names'=> $req_names,]);
+    }
+
+    public function actionWorking($id)
+    {
+        $task = Tasks::findOne($id);
+        $task->task_check = Tasks::STATUS_INWORKING;
+        $task->user_check = Yii::$app->user->id;
+        if($task->save()){
+            return $this->redirect(['notarius/notarius']);
+        }
+    }
+
+    public function actionDownload($id)
+    {
+        $file_download = new Files();
+        $file_download->dowload($id);
     }
 }

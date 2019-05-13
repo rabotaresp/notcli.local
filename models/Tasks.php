@@ -19,6 +19,9 @@ use Yii;
  */
 class Tasks extends \yii\db\ActiveRecord
 {
+    const STATUS_WAITING = 0;
+    const STATUS_INWORKING = 2;
+    const STATUS_DONE = 3;
 
     /**
      * {@inheritdoc}

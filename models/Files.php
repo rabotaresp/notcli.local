@@ -34,7 +34,7 @@ class Files extends ActiveRecord
             [['filename', 'user_id', 'fileway'], 'required'],
             [['user_id'], 'integer'],
             [['fileway','filename'], 'string', 'max' => 250],
-            [['docFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf, x-pdf'],
+            [['docFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf'],
         ];
     }
 
@@ -67,14 +67,12 @@ class Files extends ActiveRecord
             return false;
         }
     }
-    public function actionDowload($key)
+    public function dowload($key)
     {
+
         $user = Yii::$app->user->identity->id;
-        $file_path = Files::find()->andWhere(['filename' => $key])->andWhere(['user-id'=>$user])->one();
-        $file = Yii::getAlias('@webroot') . $file_path;
-
-//        $file = $path . '/sample.pdf';
-
+        $file_path = self::find()->andWhere(['id' => $key])->one();
+        $file = Yii::getAlias('@web') . trim($file_path['fileway'],'.');
         if (file_exists($file)) {
             Yii::$app->response->sendFile($file);
         }

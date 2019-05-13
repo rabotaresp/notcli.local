@@ -56,34 +56,18 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= $item['tasks'] ?></td>
             <td><?= $name;?> </td>
             <td>
-                <?= Html::submitButton('status', ['class' => 'btn btn-primary']) ?>
-
-<!--                --><?//$js = <<<JS
-//                        $('form').on('beforeSubmit', function(){
-//                        var data = $(this).serialize();
-//                        $.ajax({
-//                        url: '/files/notarius',
-//                        type: 'POST',
-//                        data: data,
-//                        success: function(st1){
-//                        console.log(st1);
-//                        },
-//                        error: function(){
-//                        alert('Error!');
-//                        }
-//                        });
-//                        return false;
-//                        });
-//                    JS;
-//                    $this->registerJs($js);
-//                ?>
+                <?= \yii\helpers\Html::a('take in work',
+                    ['working','id'=>$item['id']],['class' => 'btn btn-primary']);?>
             </td>
-            <td><?= Html::submitButton('Download file', ['class' => 'btn btn-primary']) ?> </td>
+            <td>
+                <?= \yii\helpers\Html::a('dowload',
+                    ['download','id'=>$item['file_key']],['class' => 'btn btn-primary']);?>
+            </td>
+<!--            <td>--><?//= Html::submitButton('Download file', ['id'=>$model->id,'class' => 'btn btn-primary']) ?><!-- </td>-->
         </tr>
         <? $count++;}; ?>
 
         </tbody>
     </table>
-<!--    <a href="reg">--><?//=$err;?><!--</a>-->
 
 </div>

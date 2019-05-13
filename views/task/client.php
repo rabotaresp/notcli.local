@@ -51,17 +51,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </thead>
         <tbody>
         <?
+            $count=0;
             foreach ($task_table as $item) {
+                $name_notary = $req_names[$count];
         ?>
         <tr>
             <td><?= $item['tasks'] ?></td>
 <!--            <td>--><?//= $item['user_check'] ?><!--</td>-->
-            <td><?= $req_names; ?></td>
-            <td><?= $item['task_check'] ?></td>
-            <td><?= Html::submitButton('Download file', ['class' => 'btn btn-primary']) ?> </td>
+            <td><?= $name_notary; ?></td>
+            <td><?= $status[$item['task_check']] ?></td>
+            <td>
+                <?= \yii\helpers\Html::a('dowload',
+                    ['download','id'=>$item['file_key']],['class' => 'btn btn-primary']);?>
+            </td>
 
         </tr>
-        <? }; ?>
+        <? $count++;}; ?>
 
         </tbody>
     </table>

@@ -49,15 +49,25 @@ class ClientController extends Controller
             }
             if ($model->upload($path, $name)) {
                 // file is uploaded successfully
-                return $this->redirect('/files/client');
+                return $this->redirect(['/client/client']);
+//                return $this->render('/task/client');
             }
         }
         $task->tasks = null;
         $model->docFile = null;
         $task_table = $task->findTaskCli();
         foreach ($task_table as $item) {
-            $req_names = $task->findName($item['user_check']);
+            $req_names []= $task->findName($item['user_check']);
         }
-        return $this->render('/task/client', ['model' => $model, 'task' => $task, 'task_table'=>$task_table, 'req_names'=>$req_names,]);
+        $status = ['0' => 'Waiting',
+            '2'=>'In working',
+            '3'=>'Done'];
+        return $this->render('/task/client', ['model' => $model, 'task' => $task, 'task_table'=>$task_table, 'req_names'=>$req_names, 'status'=>$status,]);
     }
+    public function actionDownload($id)
+    {
+        $file_download = new Files();
+        $file_download->dowload($id);
+    }
+
 }
