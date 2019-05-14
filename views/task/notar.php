@@ -11,7 +11,7 @@ use yii\bootstrap\ActiveForm;
 use yii\web\View;
 
 
-$this->title = 'Table tasks clients for';
+$this->title = 'Hello, you are login as ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </td>
             <td>
                 <?= \yii\helpers\Html::a('dowload',
-                    ['download','id'=>$item['file_key']],['class' => 'btn btn-primary']);?>
+                    ['download','key'=>$item['file_key']],['class' => 'btn btn-primary']);?>
             </td>
 <!--            <td>--><?//= Html::submitButton('Download file', ['id'=>$model->id,'class' => 'btn btn-primary']) ?><!-- </td>-->
         </tr>

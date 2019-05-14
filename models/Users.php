@@ -34,7 +34,7 @@ class Users extends ActiveRecord implements IdentityInterface
     {
         return [
             [['name', 'login', 'password'], 'required'],
-            [['check_user'], 'boolean'],
+            [['check_user'], 'tinyInteger'],
             [['name', 'login'], 'string', 'max' => 50],
             [['password'], 'string', 'max' => 250],
         ];

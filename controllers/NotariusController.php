@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\controllers\base\SecuredController;
 use app\models\Files;
 use app\models\Tasks;
 use app\models\Users;
@@ -14,12 +15,15 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\web\UploadedFile;
 
-class NotariusController extends Controller
+class NotariusController extends SecuredController
 {
     public function actionNotarius()
     {
         $model = new Files();
         $task = new Tasks();
+        if(Yii::$app->user->identity->check_user !=1) {
+            return $this->redirect(['users/login']);
+        }
         if (Yii::$app->request->isPost) {
             $model->docFile = UploadedFile::getInstance($model, 'docFile');
             $name = md5(time().rand(1,99).$model->docFile->baseName);
@@ -33,29 +37,28 @@ class NotariusController extends Controller
                 print_r($model->errors);
                 exit();
             }
-            $req_t = Yii::$app->request->Post('Tasks');
-            $task->user_id = Yii::$app->user->identity->id;
-
-            if(Yii::$app->user->identity->check_user ==0) {
-                $task->user_check = Yii::$app->user->identity->id;
-            }
-            $task->tasks = $req_t['tasks'];
-            $task->file_key = $model->id;
-            $task->task_check = 0;
-            $task->save();
-            if(!$task->save()){
-                echo'<pre>';
-                print_r($task->errors);
-                exit();
-            }
+//            $req_t = Yii::$app->request->Post('Tasks');
+//            $task->user_id = Yii::$app->user->identity->id;
+//            if(Yii::$app->user->identity->check_user ==0) {
+//                $task->user_check = Yii::$app->user->identity->id;
+//            }
+//            $task->tasks = $req_t['tasks'];
+//            $task->file_key = $model->id;
+//            $task->task_check = 0;
+//            $task->save();
+//            if(!$task->save()){
+//                echo'<pre>';
+//                print_r($task->errors);
+//                exit();
+//            }
             if ($model->upload($path, $name)) {
                 // file is uploaded successfully
                 return $this->redirect('/notarius/notarius');
             }
         }
-        $task->tasks = null;
+//        $task->tasks = null;
         $model->docFile = null;
-        $task_table = $task->findTaskNot();
+        $task_table = $task->findTaskNotary();
         foreach ($task_table as $item) {
             $req_names[] = $task->findName($item['user_id']);
 

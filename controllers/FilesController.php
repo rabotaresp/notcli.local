@@ -2,13 +2,14 @@
 
 namespace app\controllers;
 
+use app\controllers\base\SecuredController;
 use app\models\Files;
 use app\models\Tasks;
 use Yii;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 
-class FilesController extends Controller
+class FilesController extends SecuredController
 {
 
     public function actionClient()

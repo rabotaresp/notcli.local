@@ -15,9 +15,9 @@ class UsersController extends Controller
 {
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
+//        if (!Yii::$app->user->isGuest) {
+//            return $this->goHome();
+//        }
         $model = new Users();
         if(Yii::$app->request->post('Users')){
             $req = Yii::$app->request->post('Users');

@@ -38,8 +38,9 @@ class Tasks extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'user_check', 'tasks', 'file_key'], 'required'],
-            [['user_id', 'user_check', 'file_key', 'task_check'], 'integer'],
+            [['user_id', 'user_check', 'task_check'], 'integer'],
             [['tasks'], 'string', 'max' => 100],
+            [['file_key'],'string', 'max' => 250],
             [['file_key'], 'exist', 'skipOnError' => true, 'targetClass' => Files::className(), 'targetAttribute' => ['file_key' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
@@ -75,12 +76,12 @@ class Tasks extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Users::className(), ['id' => 'user_id']);
     }
-    public function findTaskNot()
+    public function findTaskNotary()
     {
         $task_table = self::find()->andWhere(['user_check'=> 0])->all();
         return $task_table;
     }
-    public function findTaskCli()
+    public function findTaskClient()
     {
         $task_table = self::find()->andWhere(['user_id'=> Yii::$app->user->identity->id])->all();
         return $task_table;

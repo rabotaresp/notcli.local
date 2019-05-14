@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <td><?= $status[$item['task_check']] ?></td>
             <td>
                 <?= \yii\helpers\Html::a('dowload',
-                    ['download','id'=>$item['file_key']],['class' => 'btn btn-primary']);?>
+                    ['download','key'=>$item['file_key']],['class' => 'btn btn-primary']);?>
             </td>
 
         </tr>

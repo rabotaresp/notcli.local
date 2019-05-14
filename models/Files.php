@@ -71,7 +71,7 @@ class Files extends ActiveRecord
     {
 
         $user = Yii::$app->user->identity->id;
-        $file_path = self::find()->andWhere(['id' => $key])->one();
+        $file_path = self::find()->andWhere(['filename' => $key])->one();
         $file = $_SERVER['DOCUMENT_ROOT'].Yii::getAlias('@web') . trim($file_path['fileway'],'.');
 
         if (file_exists($file)) {

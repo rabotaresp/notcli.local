@@ -50,6 +50,7 @@ $config = [
             'enableStrictParsing' => false,
             'rules' => [
                         '<controller>/<action>/<id:\d+>'=>'<controller>/<action>',
+                        '<controller>/<action>/<key:\w+>'=>'<controller>/<action>',
             ],
         ],
     ],

@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\controllers\base\SecuredController;
 use app\models\Files;
 use app\models\Tasks;
 use app\models\Users;
@@ -14,13 +15,16 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use yii\web\UploadedFile;
 
-class ClientController extends Controller
+class ClientController extends SecuredController
 {
 
     public function actionClient()
     {
         $model = new Files();
         $task = new Tasks();
+        if(Yii::$app->user->identity->check_user !=0){
+            return $this->redirect(['users/login']);
+        }
         if (Yii::$app->request->isPost) {
             $model->docFile = UploadedFile::getInstance($model, 'docFile');
             $name = md5(time().rand(1,99).$model->docFile->baseName);
@@ -55,7 +59,7 @@ class ClientController extends Controller
         }
         $task->tasks = null;
         $model->docFile = null;
-        $task_table = $task->findTaskCli();
+        $task_table = $task->findTaskClient();
         foreach ($task_table as $item) {
             $req_names []= $task->findName($item['user_check']);
         }
