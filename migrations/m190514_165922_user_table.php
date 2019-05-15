@@ -24,14 +24,14 @@ class m190514_165922_user_table extends Migration
             [
                 'name'=>'Mihail',
                 'login'=>'Mihab',
-                'password'=>'123',
+                'password'=>Yii::$app->security->generatePasswordHash('123'),
                 'check_user'=>1,
             ]);
         $this->insert('users',
             [
                 'name'=>'Qwerty',
                 'login'=>'Qwerty',
-                'password'=>'123',
+                'password'=>Yii::$app->security->generatePasswordHash('123'),
             ]);
 
     }

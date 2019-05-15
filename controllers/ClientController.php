@@ -43,7 +43,7 @@ class ClientController extends SecuredController
 
             $task->user_check = 0;
             $task->tasks = $req_t['tasks'];
-            $task->file_key = $model->id;
+            $task->file_key = $model->filename;
             $task->task_check = 0;
             $task->save();
             if(!$task->save()){

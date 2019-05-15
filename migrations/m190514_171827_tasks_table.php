@@ -20,6 +20,7 @@ class m190514_171827_tasks_table extends Migration
                 'user_check'=>$this->integer(),
                 'tasks'=>$this->string(100),
                 'file_key'=>$this->string(250),
+                'task_check'=>$this->integer(),
             ]);
     }
 

@@ -16,7 +16,7 @@ class m190514_173403_files_table extends Migration
         $this->createTable(self::FILES_TABLE,
             [
                 'id'=>$this->primaryKey(),
-                'filename'=>$this->string(250),
+                'filename'=>$this->string(250)->unique(),
                 'user_id'=>$this->integer(),
                 'fileway'=>$this->string(250),
             ]);

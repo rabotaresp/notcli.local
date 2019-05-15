@@ -41,7 +41,7 @@ class Tasks extends \yii\db\ActiveRecord
             [['user_id', 'user_check', 'task_check'], 'integer'],
             [['tasks'], 'string', 'max' => 100],
             [['file_key'],'string', 'max' => 250],
-            [['file_key'], 'exist', 'skipOnError' => true, 'targetClass' => Files::className(), 'targetAttribute' => ['file_key' => 'id']],
+            [['file_key'], 'exist', 'skipOnError' => true, 'targetClass' => Files::className(), 'targetAttribute' => ['file_key' => 'filename']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
