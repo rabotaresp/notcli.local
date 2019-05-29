@@ -1,11 +1,8 @@
 <?php
-
 namespace app\controllers;
-
 //use Yii;
 use yii\web\Controller;
 use darkdrim\simplehtmldom\SimpleHTMLDom;
-
 //class ParseController extends Controller
 //{
 //    public function actionParse()
@@ -44,6 +41,7 @@ class ParseController extends Controller
     /**
      * @qmode:2 поиск по описанию
      * @qmode:13 поиск по номеру код/ое-номер/аналог
+     * @quantity кол-во на складе
      */
     public function actionParsem()
     {
@@ -53,13 +51,12 @@ class ParseController extends Controller
 //            );
 //        }
 //        unicode_escape_decode();
-        $query = "wd-40";
+        $query = "глушитель";
         $url = 'http://motexc.by/serv/php/router.php';
         $data = '{"action":"QueryDatabase","method":"getArticles",
-        "data":{"smode":0,"typ_id":0,"qmode":13,"query":"'.$query.'",
+        "data":{"smode":0,"typ_id":0,"qmode":2,"query":"'.$query.'",
         "hide_ext_stores":true,"sp_id":0,"region_id":0,"total":0,
         "user_id":null,"page":1,"start":0,"limit":1000},"type":"rpc","tid":1}';
-        $data_json = json_encode($data);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
@@ -67,19 +64,21 @@ class ParseController extends Controller
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $response  = curl_exec($ch);
-        echo'<pre>';
-        print_r($response);
+//        echo '<pre>';
+//        print_r(json_decode($response));
+        $data_json = json_decode($response);
+        foreach ($data_json->result->articles as $item) {
+            echo $item->description.' '.$item->price*2.34.'<br>';
+//            echo $item->price*2.35.'<br>';
 
-//        echo json_encode($response, JSON_UNESCAPED_UNICODE);
+        }
         curl_close($ch);
         exit();
-
 //        $ch = curl_init("http://motexc.by/serv/php/router.php");
 //        curl_setopt($ch, CURLOPT_POSTFIELDS, );
 //        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 //        $str = curl_exec($ch);
 //        curl_close($ch);
-
 //        $str = file_get_contents("https://trotuarnayaplitka.by/cena");
 //        $data = SimpleHTMLDom::str_get_html($str);
 //        $container = $data->find('.product-container')[0];
@@ -92,6 +91,5 @@ class ParseController extends Controller
 //            echo $name.' '.$price.' '. $a.'<br>'; // объект по ссылке $a. Далее его можно разложить как $str в $data $data = SimpleHTMLDom::str_get_html($product);
 //        }
 //        exit();
-
     }
 }
